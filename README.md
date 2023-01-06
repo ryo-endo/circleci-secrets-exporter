@@ -1,5 +1,8 @@
 # circleci-secrets-exporter
 
+Export CircleCI secrets in CSV format.
+CircleCIのシークレットをCSV形式で出力するスクリプトです。
+
 ## How to use
 1. Open main.py and overwrite the correct constants.
 ```python
