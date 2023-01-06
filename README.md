@@ -3,6 +3,9 @@
 Export CircleCI secrets in CSV format.  
 CircleCIのシークレットをCSV形式で出力するスクリプトです。
 
+<img width="468" alt="image" src="https://user-images.githubusercontent.com/16891862/211035225-f78e743b-0fdb-4817-bf00-28aae5f27864.png">
+
+
 ## How to use
 1. Open main.py and overwrite the correct constants.
 ```python
