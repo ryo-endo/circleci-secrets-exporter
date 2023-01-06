@@ -1,6 +1,6 @@
 # circleci-secrets-exporter
 
-Export CircleCI secrets in CSV format.
+Export CircleCI secrets in CSV format.  
 CircleCIのシークレットをCSV形式で出力するスクリプトです。
 
 ## How to use
