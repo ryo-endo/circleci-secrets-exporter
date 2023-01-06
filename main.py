@@ -45,6 +45,9 @@ with open(f'{OUTPUT_DIR}/project_envvars.csv', 'w') as f:
             'GET', f'/api/v2/project/github/{GITHUB_ORG}/{prj}/envvar', headers=headers)
         res = conn.getresponse()
         body = json.loads(res.read().decode('utf-8'))
+        if res.status != 200:
+            print(f'Status code: {res.status}, {body}')
+            continue
         rows = [[prj, item['name'], item['value']] for item in body['items']]
         writer.writerows(rows)
 
@@ -60,6 +63,9 @@ with open(f'{OUTPUT_DIR}/project_checkout-ssh-keys.csv', 'w') as f:
             'GET', f'/api/v2/project/github/{GITHUB_ORG}/{prj}/checkout-key', headers=headers)
         res = conn.getresponse()
         body = json.loads(res.read().decode('utf-8'))
+        if res.status != 200:
+            print(f'Status code: {res.status}, {body}')
+            continue
         rows = [[prj, item['type'], item['preferred'], item['created_at'],
                  item['public_key'], item['fingerprint']] for item in body['items']]
         writer.writerows(rows)
@@ -75,6 +81,9 @@ with open(f'{OUTPUT_DIR}/project_additional-ssh-keys.csv', 'w') as f:
             'GET', f'/api/v1.1/project/github/{GITHUB_ORG}/{prj}/settings', headers=headers)
         res = conn.getresponse()
         body = json.loads(res.read().decode('utf-8'))
+        if res.status != 200:
+            print(f'Status code: {res.status}, {body}')
+            continue
         rows = [[prj, item['hostname'], item['public_key'],
                  item['fingerprint']] for item in body['ssh_keys']]
         writer.writerows(rows)
@@ -90,6 +99,9 @@ with open(f'{OUTPUT_DIR}/project_api-tokens.csv', 'w') as f:
             'GET', f'/api/v1.1/project/github/{GITHUB_ORG}/{prj}/token', headers=headers)
         res = conn.getresponse()
         body = json.loads(res.read().decode('utf-8'))
+        if res.status != 200:
+            print(f'Status code: {res.status}, {body}')
+            continue
         rows = [[prj, item['label'], item['scope'], item['time'], item['id']]
                 for item in body]
         writer.writerows(rows)
