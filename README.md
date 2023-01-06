@@ -13,8 +13,10 @@ CircleCIのシークレットをCSV形式で出力するスクリプトです。
 CIRCLECI_API_TOKEN = 'API-TOKEN-HERE'
 # Output folder for csv files
 OUTPUT_DIR = '/tmp'
-# GitHub organization name for output
-GITHUB_ORG = 'org-name'
+# Organization name
+ORG_NAME = 'org-name'
+# VCS provider name (E.g. 'github', 'bitbucket')
+VCS_TYPE = 'github'
 ```
 
 2. Run scripts

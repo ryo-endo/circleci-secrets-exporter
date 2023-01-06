@@ -7,8 +7,10 @@ import json
 CIRCLECI_API_TOKEN = 'API-TOKEN-HERE'
 # Output folder for csv files
 OUTPUT_DIR = '/tmp'
-# GitHub organization name for output
-GITHUB_ORG = 'org-name'
+# Organization name
+ORG_NAME = 'org-name'
+# VCS provider name (E.g. 'github', 'bitbucket')
+VCS_TYPE = 'github'
 
 
 conn = http.client.HTTPSConnection('circleci.com')
@@ -23,11 +25,11 @@ headers = {
 project_names = []
 for i in range(1, 100):
     conn.request(
-        'GET', f'/api/v1.1/user/repos/github?page={i}&per-page=100', headers=headers)
+        'GET', f'/api/v1.1/user/repos/{VCS_TYPE}?page={i}&per-page=100', headers=headers)
     res = conn.getresponse()
     res_data = json.loads(res.read().decode('utf-8'))
     names = [repo['name']
-             for repo in res_data if repo['username'] == GITHUB_ORG]
+             for repo in res_data if repo['username'] == ORG_NAME]
     if not len(names):
         break
     project_names += names
@@ -42,7 +44,7 @@ with open(f'{OUTPUT_DIR}/project_envvars.csv', 'w') as f:
     for i, prj in enumerate(project_names, 1):
         print(f'[{f.name}] {i}/{max}: {prj}')
         conn.request(
-            'GET', f'/api/v2/project/github/{GITHUB_ORG}/{prj}/envvar', headers=headers)
+            'GET', f'/api/v2/project/{VCS_TYPE}/{ORG_NAME}/{prj}/envvar', headers=headers)
         res = conn.getresponse()
         body = json.loads(res.read().decode('utf-8'))
         if res.status != 200:
@@ -60,7 +62,7 @@ with open(f'{OUTPUT_DIR}/project_checkout-ssh-keys.csv', 'w') as f:
     for i, prj in enumerate(project_names, 1):
         print(f'[{f.name}] {i}/{max}: {prj}')
         conn.request(
-            'GET', f'/api/v2/project/github/{GITHUB_ORG}/{prj}/checkout-key', headers=headers)
+            'GET', f'/api/v2/project/{VCS_TYPE}/{ORG_NAME}/{prj}/checkout-key', headers=headers)
         res = conn.getresponse()
         body = json.loads(res.read().decode('utf-8'))
         if res.status != 200:
@@ -78,7 +80,7 @@ with open(f'{OUTPUT_DIR}/project_additional-ssh-keys.csv', 'w') as f:
     for i, prj in enumerate(project_names, 1):
         print(f'[{f.name}] {i}/{max}: {prj}')
         conn.request(
-            'GET', f'/api/v1.1/project/github/{GITHUB_ORG}/{prj}/settings', headers=headers)
+            'GET', f'/api/v1.1/project/{VCS_TYPE}/{ORG_NAME}/{prj}/settings', headers=headers)
         res = conn.getresponse()
         body = json.loads(res.read().decode('utf-8'))
         if res.status != 200:
@@ -96,7 +98,7 @@ with open(f'{OUTPUT_DIR}/project_api-tokens.csv', 'w') as f:
     for i, prj in enumerate(project_names, 1):
         print(f'[{f.name}] {i}/{max}: {prj}')
         conn.request(
-            'GET', f'/api/v1.1/project/github/{GITHUB_ORG}/{prj}/token', headers=headers)
+            'GET', f'/api/v1.1/project/{VCS_TYPE}/{ORG_NAME}/{prj}/token', headers=headers)
         res = conn.getresponse()
         body = json.loads(res.read().decode('utf-8'))
         if res.status != 200:
@@ -108,7 +110,7 @@ with open(f'{OUTPUT_DIR}/project_api-tokens.csv', 'w') as f:
 
 # Create context list
 # ref: https://circleci.com/docs/api/v2/index.html#operation/listContexts
-conn.request('GET', f'/api/v2/context?owner-slug=github/{GITHUB_ORG}', headers=headers)
+conn.request('GET', f'/api/v2/context?owner-slug={VCS_TYPE}/{ORG_NAME}', headers=headers)
 res = conn.getresponse()
 body = json.loads(res.read().decode('utf-8'))
 context_ids = {c['name']: c['id'] for c in body['items']}
