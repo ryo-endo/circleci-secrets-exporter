@@ -105,3 +105,22 @@ with open(f'{OUTPUT_DIR}/project_api-tokens.csv', 'w') as f:
         rows = [[prj, item['label'], item['scope'], item['time'], item['id']]
                 for item in body]
         writer.writerows(rows)
+
+# Create context list
+# ref: https://circleci.com/docs/api/v2/index.html#operation/listContexts
+conn.request('GET', f'/api/v2/context?owner-slug=github/{GITHUB_ORG}', headers=headers)
+res = conn.getresponse()
+body = json.loads(res.read().decode('utf-8'))
+context_ids = {c['name']: c['id'] for c in body['items']}
+
+# Export: Context variables
+# ref: https://circleci.com/docs/api/v2/index.html#operation/listEnvironmentVariablesFromContext
+with open(f'{OUTPUT_DIR}/context_envvars.csv', 'w') as f:
+    writer = csv.writer(f)
+    writer.writerow(['context_name', 'variable', 'created_at'])
+    for name, id in context_ids.items():
+        conn.request("GET", f"/api/v2/context/{id}/environment-variable", headers=headers)
+        res = conn.getresponse()
+        body = json.loads(res.read().decode('utf-8'))
+        rows = [[name, item['variable'], item['created_at']] for item in body['items']]
+        writer.writerows(rows)

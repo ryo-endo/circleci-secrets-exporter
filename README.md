@@ -22,14 +22,12 @@ python ./main.py
 Output destination is OUTPUT_DIR.  
 Some csv files are created (i.e. project_envvars.csv)
 
-
-
 ## Supported secrets
 - Project environment variables
 - Project Checkout SSH keys
 - Project Additional SSH keys
 - Project API tokens
+- Context variables
 
 ## TODO or Not supported
-- Export Context variables
-- Number of Secrets across multiple pages (= next_page_token)
+- API Pagination (= next_page_token)
