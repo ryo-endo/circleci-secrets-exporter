@@ -30,6 +30,6 @@ Some csv files are created (i.e. project_envvars.csv)
 - Project Additional SSH keys
 - Project API tokens
 
-## TODO
-- Context variables
-
+## TODO or Not supported
+- Export Context variables
+- Number of Secrets across multiple pages (= next_page_token)
