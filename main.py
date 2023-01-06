@@ -55,7 +55,7 @@ with open(f'{OUTPUT_DIR}/project_checkout-ssh-keys.csv', 'w') as f:
     writer.writerow(['project_name', 'type', 'preferred',
                     'created_at', 'public_key', 'fingerprint'])
     for i, prj in enumerate(project_names, 1):
-        print(f'{i}/{max}: {prj}')
+        print(f'[{f.name}] {i}/{max}: {prj}')
         conn.request(
             'GET', f'/api/v2/project/github/{GITHUB_ORG}/{prj}/checkout-key', headers=headers)
         res = conn.getresponse()
@@ -70,7 +70,7 @@ with open(f'{OUTPUT_DIR}/project_additional-ssh-keys.csv', 'w') as f:
     writer = csv.writer(f)
     writer.writerow(['project_name', 'hostname', 'public_key', 'fingerprint'])
     for i, prj in enumerate(project_names, 1):
-        print(f'{i}/{max}: {prj}')
+        print(f'[{f.name}] {i}/{max}: {prj}')
         conn.request(
             'GET', f'/api/v1.1/project/github/{GITHUB_ORG}/{prj}/settings', headers=headers)
         res = conn.getresponse()
@@ -85,7 +85,7 @@ with open(f'{OUTPUT_DIR}/project_api-tokens.csv', 'w') as f:
     writer = csv.writer(f)
     writer.writerow(['project_name', 'label', 'scope', 'time', 'id'])
     for i, prj in enumerate(project_names, 1):
-        print(f'{i}/{max}: {prj}')
+        print(f'[{f.name}] {i}/{max}: {prj}')
         conn.request(
             'GET', f'/api/v1.1/project/github/{GITHUB_ORG}/{prj}/token', headers=headers)
         res = conn.getresponse()
